@@ -1,0 +1,62 @@
+import networkx as nx
+import pylab
+
+
+
+
+digraph = nx.DiGraph()
+
+weight_edges = [(0, 1, 5),(0, 2, 3),(0, 4, 2),(1, 2, 2),(1, 3, 6),
+                           (2, 1, 1),(2, 3, 2),(4, 1, 6),(4, 2, 10),(4, 3, 4)
+                           ]
+
+
+digraph.add_weighted_edges_from(weight_edges) # yuarıdaki listeden nodeları ve edgeleri oluşturan ve edgelere ağırlık ekleyen metod.
+
+# çıktının sürekliliği için nodeların uzaydaki pozisyonları belirlendi
+digraph.nodes[0]['pos']  = (6,6)
+digraph.nodes[1]['pos']  = (10,4)
+digraph.nodes[2]['pos']  = (8,1)
+digraph.nodes[3]['pos']  = (4,1)
+digraph.nodes[4]['pos']  = (2,4)
+
+#pozisyon bilgileri değişkende tutuldu
+node_pos=nx.get_node_attributes(digraph,'pos')
+for i in range(0, 4):
+    try:
+        print("shortest path length from 4 to ",  i, ": ", nx.dijkstra_path_length(digraph, 4, i),
+              "and the path is:",nx.dijkstra_path(digraph,4,i))
+    except nx.exception.NetworkXNoPath:
+            print("There is no path from 4 to", i)
+
+
+nx.draw_networkx_nodes(digraph,node_pos) #noktalar çizildi
+nx.draw_networkx_edges(digraph,node_pos,edge_color='black',edgelist= digraph.edges()) #kenarlar çizildi
+
+edge_labels=dict([((u,v),d['weight']) # ağırlık bilgisi için değişken
+             for u,v,d in  digraph.edges(data=True)])
+nx.draw_networkx_edge_labels(digraph, node_pos, edge_labels=edge_labels, label_pos=0.3, font_size=9) # ağırlıklar belirtildi
+
+
+nx.draw_networkx(digraph, node_pos, node_size=500,with_labels=True) #node bilgileri çizildi
+
+
+
+
+pylab.show() # grafik gösterildi.
+digraph.remove_node(2)
+nx.draw_networkx_nodes(digraph,node_pos) #noktalar çizildi
+nx.draw_networkx_edges(digraph,node_pos,edge_color='black',edgelist= digraph.edges()) #kenarlar çizildi
+
+edge_labels=dict([((u,v),d['weight']) # ağırlık bilgisi için değişken
+             for u,v,d in  digraph.edges(data=True)])
+nx.draw_networkx_edge_labels(digraph, node_pos, edge_labels=edge_labels, label_pos=0.3, font_size=9)
+nx.draw_networkx(digraph, node_pos, node_size=500,with_labels=True) #node bilgileri çizildi
+print("**********************")
+for i in range(0, 4):
+    try:
+        print("shortest path length from 4 to ",  i, ": ", nx.dijkstra_path_length(digraph, 4, i),
+              "and the path is:",nx.dijkstra_path(digraph,4,i))
+    except nx.exception.NetworkXNoPath:
+            print("There is no path from 4 to", i)
+pylab.show()
